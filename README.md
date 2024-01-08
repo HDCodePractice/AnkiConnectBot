@@ -1,6 +1,9 @@
 # AnkiConnectBot
 AnkiConnectBot is a Telegram Bot can easy connect to Anki manage your cards
 
+* English vocabulary card generate
+* Portuguese vocabulary card generate
+* Code snippet card generate
 
 # References
 * [AnkiConnect](https://foosoft.net/projects/anki-connect/) enable API communicate with Anki.
