@@ -1,2 +1,8 @@
 # AnkiConnectBot
 AnkiConnectBot is a Telegram Bot can easy connect to Anki manage your cards
+
+
+# References
+* [AnkiConnect](https://foosoft.net/projects/anki-connect/) enable API communicate with Anki.
+* [AnkiIn](https://github.com/Clouder0/AnkiIn) have [ankiConnectHelper.py](https://github.com/Clouder0/AnkiIn/blob/main/AnkiIn/helper/ankiConnectHelper.py) can easy connect to AnkiConnect
+* [edge_tts](https://github.com/rany2/edge-tts)
