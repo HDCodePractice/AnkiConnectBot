@@ -1,11 +1,24 @@
+from io import StringIO
 import os
 from environs import Env
-from src.util.doppler import get_doppler_env
+from util import doppler
+
+
+def get_doppler_env():
+    doppler_token = env.str('DOPPLER_TOKEN', default='')
+
+    if len(doppler_token) > 0:
+        response = doppler.get_doppler_env(doppler_token)
+        if len(response) > 0:
+            config = StringIO(response)
+            env.read_file(config)
+
 
 env = Env()
 env.read_env(f"{os.getcwd()}/local.env")
 get_doppler_env()
 
-conf = {
-    'anki_connect_base_url': env.str("ANKI_URL", "http://localhost:8765")
-}
+
+class settings:
+    DEBUG = env.bool('DEBUG', default=False)
+    BOT_TOKEN = env.str('BOT_TOKEN', default='')
