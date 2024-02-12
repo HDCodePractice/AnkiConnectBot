@@ -1,7 +1,5 @@
 from base64 import b64encode
 import requests
-from src.settings import env
-from io import StringIO
 
 
 def get_doppler_env(token):
@@ -41,13 +39,3 @@ def update_doppler_evn(token, secrets):
 
     response = requests.post(url, json=payload, headers=headers)
     return response
-
-
-def get_doppler_env():
-    doppler_token = env.str('DOPPLER_TOKEN', default='')
-
-    if len(doppler_token) > 0:
-        response = get_doppler_env(doppler_token)
-        if len(response) > 0:
-            config = StringIO(response)
-            env.read_file(config)

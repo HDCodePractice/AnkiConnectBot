@@ -1,3 +1,7 @@
 python-telegram-bot
 environs
 edge-tts
+genanki
+openai
+requests
+openai
