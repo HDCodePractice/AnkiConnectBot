@@ -4,3 +4,4 @@ edge-tts
 genanki
 openai
 requests
+openai

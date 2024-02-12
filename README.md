@@ -20,6 +20,10 @@ BOT_TOKEN=<Your Bot Token>
 * Put your token in local.env
 * Start your Bot `python src/main.py`
 
+## Bot Commands
+
+
+
 
 # References
 * [genanki](https://github.com/kerrickstaley/genanki) can generationg Anki decks
