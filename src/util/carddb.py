@@ -43,12 +43,14 @@ class CardDBHelper:
         try:
             cursor = self.connection.cursor()
             cursor.execute('''
-                INSERT INTO cards (Vocabulary, Pronunciation, PartOfSpeech, Forms, Meaning, Example, ChineseExample, SoundVocabulary, SoundMeaning, SoundExample, Image)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO cards (Vocabulary, Pronunciation, PartOfSpeech, Forms, Meaning, Example, ChineseExample)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             ''', card_data)
             self.connection.commit()
+            return cursor.lastrowid
         except Error as e:
             print(e)
+            return 0
 
     def get_card_id_by_vocabulary_and_example(self, vocabulary, example):
         try:
@@ -84,7 +86,40 @@ class CardDBHelper:
         except Error as e:
             print(e)
 
-    def close_connection(self):
+    def get_all_cards(self):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute('''
+                SELECT * FROM cards
+            ''')
+            return cursor.fetchall()
+        except Error as e:
+            print(e)
+
+    def save_blobs_to_files(self, card_id, save_path):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute('''
+                SELECT SoundVocabulary, SoundMeaning, SoundExample, Image FROM cards WHERE ID = ?
+            ''', (card_id,))
+            result = cursor.fetchone()
+            if result:
+                sound_vocabulary_blob, sound_meaning_blob, sound_example_blob, image_blob = result
+                with open(os.path.join(save_path, f"{card_id}_sound_vocabulary.mp3"), "wb") as f:
+                    f.write(sound_vocabulary_blob)
+                with open(os.path.join(save_path, f"{card_id}_sound_meaning.mp3"), "wb") as f:
+                    f.write(sound_meaning_blob)
+                with open(os.path.join(save_path, f"{card_id}_sound_example.mp3"), "wb") as f:
+                    f.write(sound_example_blob)
+                with open(os.path.join(save_path, f"{card_id}_image.jpg"), "wb") as f:
+                    f.write(image_blob)
+                print(f"Files saved successfully to {save_path}")
+            else:
+                print("Card not found with given ID.")
+        except Error as e:
+            print(e)
+
+    def close(self):
         if self.connection:
             self.connection.close()
 
