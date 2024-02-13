@@ -9,7 +9,7 @@ index all function handlers
 from .start import start
 from .help import help_command
 from .whoami import whoami
-from .addv import add_vocabulary
+from .add_vocabulary import add_vocabulary
 
 command_map = {
     'start': start,
@@ -19,7 +19,7 @@ command_map = {
     # ....
     'whoami': whoami,
     'help': help_command,
-    'addv': add_vocabulary
+    'a': add_vocabulary
 }
 
 # --------------------------------------
