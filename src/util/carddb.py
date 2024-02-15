@@ -70,7 +70,7 @@ class CardDBHelper:
         try:
             cursor = self.connection.cursor()
             cursor.execute('''
-                SELECT Vocabulary, Pronunciation, PartOfSpeech, Forms, Meaning, ChineseMeaning, Example, ChineseExample FROM cards WHERE ID = ?
+                SELECT * FROM cards WHERE ID = ?
             ''', (card_id,))
             return cursor.fetchone()
         except Error as e:
@@ -123,7 +123,7 @@ class CardDBHelper:
         try:
             cursor = self.connection.cursor()
             cursor.execute('''
-                SELECT ID, Vocabulary, Example
+                SELECT ID, Vocabulary, Example, SoundVocabulary, SoundMeaning, SoundExample, Image
                 FROM cards
                 WHERE Vocabulary LIKE ?
             ''', ('%' + query + '%',))

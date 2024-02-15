@@ -23,5 +23,5 @@ async def search_cards(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     res_msg = ""
     for result in res:
-        res_msg += f'ID: {result[0]}, Vocabulary: {result[1]}, Example: {result[2]}\n'
+        res_msg += f'ID: {result[0]}, Vocabulary: {result[1]}, Example: {result[2]}, Voice: { "❌" if result[3]==None else "✅" }{ "❌" if result[4]==None else "✅" }{ "❌" if result[5]==None else "✅" } Image:{ "❌" if result[6]==None else "✅" }\n'
     return await msg.reply_text(res_msg)

@@ -18,7 +18,11 @@ async def update_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     card = card_db.get_card(card_id)
     if card is None:
         return await msg.reply_text("card id not found")
-    vocabulary, pronunciation, part_of_speech, forms, meaning, chinese_meaning, example, chinese_example = card
+    vocabulary = card[1]
+    meaning = card[5]
+    example = card[7]
+    log.info(
+        f"vocabulary: {vocabulary} meaning: {meaning} example: {example} will be generated voice")
 
     # 生成语音
     with tempfile.NamedTemporaryFile() as v_audio, \
