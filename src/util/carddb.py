@@ -26,6 +26,7 @@ class CardDBHelper:
                     PartOfSpeech TEXT,
                     Forms TEXT,
                     Meaning TEXT,
+                    ChineseMeaning TEXT,
                     Example TEXT,
                     ChineseExample TEXT,
                     SoundVocabulary BLOB NULL,
@@ -43,16 +44,15 @@ class CardDBHelper:
         try:
             cursor = self.connection.cursor()
             cursor.execute('''
-                INSERT INTO cards (Vocabulary, Pronunciation, PartOfSpeech, Forms, Meaning, Example, ChineseExample)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO cards (Vocabulary, Pronunciation, PartOfSpeech, Forms, Meaning, ChineseMeaning, Example, ChineseExample)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', card_data)
             self.connection.commit()
             return cursor.lastrowid
         except Error as e:
             print(e)
-            return 0
 
-    def get_card_id_by_vocabulary_and_example(self, vocabulary, example):
+    def get_card(self, vocabulary, example):
         try:
             cursor = self.connection.cursor()
             cursor.execute('''
@@ -66,13 +66,32 @@ class CardDBHelper:
         except Error as e:
             print(e)
 
-    def update_sound_files_by_id(self, card_id, sound_vocabulary_path, sound_meaning_path, sound_example_path):
+    def get_card(self, card_id):
         try:
             cursor = self.connection.cursor()
             cursor.execute('''
+                SELECT Vocabulary, Pronunciation, PartOfSpeech, Forms, Meaning, ChineseMeaning, Example, ChineseExample FROM cards WHERE ID = ?
+            ''', (card_id,))
+            return cursor.fetchone()
+        except Error as e:
+            print(e)
+
+    def update_sound_files_by_id(self, card_id, sound_vocabulary_path, sound_meaning_path, sound_example_path):
+        try:
+            # Read file contents
+            with open(sound_vocabulary_path, "rb") as f:
+                sound_vocabulary_data = f.read()
+            with open(sound_meaning_path, "rb") as f:
+                sound_meaning_data = f.read()
+            with open(sound_example_path, "rb") as f:
+                sound_example_data = f.read()
+
+            cursor = self.connection.cursor()
+            cursor.execute('''
                 UPDATE cards SET SoundVocabulary = ?, SoundMeaning = ?, SoundExample = ? WHERE ID = ?
-            ''', (sound_vocabulary_path, sound_meaning_path, sound_example_path, card_id))
+            ''', (sound_vocabulary_data, sound_meaning_data, sound_example_data, card_id))
             self.connection.commit()
+            return card_id
         except Error as e:
             print(e)
 
@@ -129,39 +148,48 @@ if __name__ == "__main__":
     db_helper = CardDBHelper(db_file)
 
     # 插入一条示例数据，其中 SoundVocabulary、SoundMeaning、SoundExample 和 Image 为空
-    example_card = (
-        "Example Vocabulary",
-        "Example Pronunciation",
-        "Example Part of Speech",
-        "Example Forms",
-        "Example Meaning",
-        "Example Example",
-        "Example Chinese Example",
-        None,
-        None,
-        None,
-        None
-    )
-    db_helper.insert_card(example_card)
+    # example_card = (
+    #     "Example Vocabulary",
+    #     "Example Pronunciation",
+    #     "Example Part of Speech",
+    #     "Example Forms",
+    #     "Example Meaning",
+    #     "Example Example",
+    #     "Example Chinese Example",
+    #     None,
+    #     None,
+    #     None,
+    #     None
+    # )
+    # db_helper.insert_card(example_card)
 
     # 示例: 通过 Vocabulary 和 Example 获取卡片 ID
-    card_id = db_helper.get_card_id_by_vocabulary_and_example(
-        "Example Vocabulary", "Example Example")
-    print("Card ID:", card_id)
+    # card_id = db_helper.get_card_id_by_vocabulary_and_example(
+    #     "Example Vocabulary", "Example Example")
+    # print("Card ID:", card_id)
 
     # 示例: 更新卡片的声音文件内容
-    with open("/path/to/sound_vocabulary.mp3", "rb") as f:
-        sound_vocabulary_data = f.read()
-    with open("/path/to/sound_meaning.mp3", "rb") as f:
-        sound_meaning_data = f.read()
-    with open("/path/to/sound_example.mp3", "rb") as f:
-        sound_example_data = f.read()
-    db_helper.update_sound_files_by_id(
-        card_id, sound_vocabulary_data, sound_meaning_data, sound_example_data)
+    # with open("/path/to/sound_vocabulary.mp3", "rb") as f:
+    #     sound_vocabulary_data = f.read()
+    # with open("/path/to/sound_meaning.mp3", "rb") as f:
+    #     sound_meaning_data = f.read()
+    # with open("/path/to/sound_example.mp3", "rb") as f:
+    #     sound_example_data = f.read()
+    # db_helper.update_sound_files_by_id(
+    #     card_id, sound_vocabulary_data, sound_meaning_data, sound_example_data)
 
     # 示例: 更新卡片的图像内容
-    with open("/path/to/image.jpg", "rb") as f:
-        image_data = f.read()
-    db_helper.update_image_by_id(card_id, image_data)
+    # with open("/path/to/image.jpg", "rb") as f:
+    #     image_data = f.read()
+    # db_helper.update_image_by_id(card_id, image_data)
 
-    db_helper.close_connection()
+    # 示例: 通过 ID 获取记录
+    card_id = 5  # 替换为您想要获取的记录的 ID
+    card = db_helper.get_card_by_id(card_id)
+    if card:
+        print("Card found:")
+        print(card)
+    else:
+        print("Card not found.")
+
+    db_helper.close()
