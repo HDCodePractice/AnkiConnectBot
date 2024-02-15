@@ -10,6 +10,7 @@ from .start import start
 from .help import help_command
 from .whoami import whoami
 from .add_vocabulary import add_vocabulary
+from .up_voice import up_voice
 
 command_map = {
     'start': start,
@@ -19,7 +20,8 @@ command_map = {
     # ....
     'whoami': whoami,
     'help': help_command,
-    'a': add_vocabulary
+    'a': add_vocabulary,
+    'uv': up_voice
 }
 
 # --------------------------------------
