@@ -119,6 +119,20 @@ class CardDBHelper:
         except Error as e:
             print(e)
 
+    def search_cards_by_vocabulary(self, query):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute('''
+                SELECT ID, Vocabulary, Example
+                FROM cards
+                WHERE Vocabulary LIKE ?
+            ''', ('%' + query + '%',))
+            results = cursor.fetchall()
+            return results
+        except Error as e:
+            print(e)
+            return []
+
     def save_blobs_to_files(self, card_id, save_path):
         try:
             cursor = self.connection.cursor()

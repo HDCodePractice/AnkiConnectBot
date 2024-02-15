@@ -12,6 +12,7 @@ from .whoami import whoami
 from .add_vocabulary import add_vocabulary
 from .update_voice import update_voice
 from .update_image import update_image
+from .search_cards import search_cards
 
 command_map = {
     'start': start,
@@ -23,7 +24,8 @@ command_map = {
     'help': help_command,
     'a': add_vocabulary,
     'uv': update_voice,
-    'ui': update_image
+    'ui': update_image,
+    's': search_cards
 }
 
 # --------------------------------------
