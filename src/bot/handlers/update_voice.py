@@ -8,7 +8,7 @@ import tempfile
 log = logging.getLogger(__name__)
 
 
-async def up_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def update_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     if len(context.args) == 0:
         return await msg.reply_text("please input card id")

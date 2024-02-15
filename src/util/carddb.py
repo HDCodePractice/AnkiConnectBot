@@ -97,11 +97,15 @@ class CardDBHelper:
 
     def update_image_by_id(self, card_id, image_path):
         try:
+            # Read file contents
+            with open(image_path, "rb") as f:
+                image_data = f.read()
             cursor = self.connection.cursor()
             cursor.execute('''
                 UPDATE cards SET Image = ? WHERE ID = ?
-            ''', (image_path, card_id))
+            ''', (image_data, card_id))
             self.connection.commit()
+            return card_id
         except Error as e:
             print(e)
 
@@ -114,6 +118,20 @@ class CardDBHelper:
             return cursor.fetchall()
         except Error as e:
             print(e)
+
+    def search_cards_by_vocabulary(self, query):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute('''
+                SELECT ID, Vocabulary, Example
+                FROM cards
+                WHERE Vocabulary LIKE ?
+            ''', ('%' + query + '%',))
+            results = cursor.fetchall()
+            return results
+        except Error as e:
+            print(e)
+            return []
 
     def save_blobs_to_files(self, card_id, save_path):
         try:
