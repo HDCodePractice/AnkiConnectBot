@@ -14,6 +14,7 @@ from .update_voice import update_voice
 from .update_image import update_image
 from .search_cards import search_cards
 from .information import information
+from .delete_card import delete_card
 
 command_map = {
     'start': start,
@@ -27,7 +28,8 @@ command_map = {
     'uv': update_voice,
     'ui': update_image,
     's': search_cards,
-    'i': information
+    'i': information,
+    'd': delete_card
 }
 
 # --------------------------------------

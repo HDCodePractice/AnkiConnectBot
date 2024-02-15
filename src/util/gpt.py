@@ -23,11 +23,6 @@ async def completion_json(
 
 async def get_card(vocabulary, example):
     """
-    生成一个单词卡片的JSON对象。
-    如果没有给出例句，请帮我生成一个简单的例句，例句越简短越好。
-    如果给出例句，请使用对应的例句。
-    JSON对象中包括以下内容:Vocabulary,Pronunciation,Definitions:[{PartOfSpeech,Forms,Meaning,ChineseMeaning,Example,ChineseExample}]
-    如果在一个词性里有多种不同的含义,就按不同的含义给出Definition.
     返回的JSON预计是这样的格式:
 {
   "Vocabulary": "light",

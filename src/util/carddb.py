@@ -76,6 +76,17 @@ class CardDBHelper:
         except Error as e:
             print(e)
 
+    def delete_card(self, card_id):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute('''
+                DELETE FROM cards WHERE ID = ?
+            ''',  (card_id,))
+            self.connection.commit()
+            return card_id
+        except Error as e:
+            print(e)
+
     def update_sound_files_by_id(self, card_id, sound_vocabulary_path, sound_meaning_path, sound_example_path):
         try:
             # Read file contents
