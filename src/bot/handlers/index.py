@@ -13,6 +13,7 @@ from .add_vocabulary import add_vocabulary
 from .update_voice import update_voice
 from .update_image import update_image
 from .search_cards import search_cards
+from .information import information
 
 command_map = {
     'start': start,
@@ -25,7 +26,8 @@ command_map = {
     'a': add_vocabulary,
     'uv': update_voice,
     'ui': update_image,
-    's': search_cards
+    's': search_cards,
+    'i': information
 }
 
 # --------------------------------------
