@@ -1,5 +1,6 @@
+import aiofiles
 import genanki
-from carddb import CardDBHelper
+from .carddb import CardDBHelper
 import os
 
 fields = [
@@ -161,6 +162,80 @@ pos_format = {
 }
 
 
+async def async_create_hd_deck():
+    card_db = CardDBHelper("cards.db")
+    cards = card_db.get_all_cards()
+
+    hd_model = genanki.Model(
+        model_id=1260907439,
+        name="老房东词汇模板",
+        fields=fields,
+        templates=[{
+            "name": "Card1",
+            'qfmt': front,
+            'afmt': backend
+        }],
+        css=css)
+
+    hd_deck = genanki.Deck(
+        1260907438,
+        '老房东的单词本'
+    )
+
+    media_files = []
+    if not os.path.exists('res'):
+        os.makedirs('res')
+
+    for card in cards:
+        card_id, vocabulary, pronunciation, part_of_speech, \
+            forms, meaning, chinese_meaning, example, chinese_example, \
+            sound_vocabulary, sound_meaning, sound_example, image = card
+
+        if sound_vocabulary:
+            async with aiofiles.open(f'res/{card_id}.mp3', 'wb') as f:
+                await f.write(sound_vocabulary)
+            media_files.append(f'res/{card_id}.mp3')
+
+        if sound_meaning:
+            async with aiofiles.open(f'res/{card_id}_m.mp3', 'wb') as f:
+                await f.write(sound_meaning)
+            media_files.append(f'res/{card_id}_m.mp3')
+
+        if sound_example:
+            async with aiofiles.open(f'res/{card_id}_e.mp3', 'wb') as f:
+                await f.write(sound_example)
+            media_files.append(f'res/{card_id}_e.mp3')
+
+        if image:
+            async with aiofiles.open(f'res/{card_id}.jpg', 'wb') as f:
+                await f.write(image)
+            media_files.append(f'res/{card_id}.jpg')
+
+        pos = pos_format.get(part_of_speech, f"{part_of_speech}.")
+
+        hd_note = genanki.Note(
+            model=hd_model,
+            fields=[
+                vocabulary,
+                pronunciation,
+                forms,
+                f"{pos}{meaning}",
+                f"{pos}{chinese_meaning}",
+                example,
+                chinese_example,
+                f"[sound:{card_id}.mp3]" if sound_vocabulary else "",
+                f"[sound:{card_id}_m.mp3]" if sound_meaning else "",
+                f"[sound:{card_id}_e.mp3]" if sound_example else "",
+                f'<img src="{card_id}.jpg">' if image else ''
+            ])
+        hd_deck.add_note(hd_note)
+
+    hd_package = genanki.Package(hd_deck)
+    hd_package.media_files = media_files
+    hd_package.write_to_file('hdbook.apkg')
+    return 'hdbook.apkg'
+
+
 def create_hd_deck():
     card_db = CardDBHelper("cards.db")
     cards = card_db.get_all_cards()
@@ -231,6 +306,7 @@ def create_hd_deck():
     hd_package = genanki.Package(hd_deck)
     hd_package.media_files = media_files
     hd_package.write_to_file('hdbook.apkg')
+    return 'hdbook.apkg'
 
 
 if __name__ == "__main__":

@@ -15,13 +15,10 @@ from .update_image import update_image
 from .search_cards import search_cards
 from .information import information
 from .delete_card import delete_card
+from .gen_deck import gen_deck
 
 command_map = {
     'start': start,
-    # ....
-    # one-to-one correspondence mapping
-    # map command to function here
-    # ....
     'whoami': whoami,
     'help': help_command,
     'a': add_vocabulary,
@@ -29,7 +26,8 @@ command_map = {
     'ui': update_image,
     's': search_cards,
     'i': information,
-    'd': delete_card
+    'd': delete_card,
+    'g': gen_deck
 }
 
 # --------------------------------------

@@ -19,7 +19,6 @@ async def add_vocabulary(update: Update, context: ContextTypes.DEFAULT_TYPE):
     example = input.split("@")[1]
     log.info(f"vocabulary: {vocabulary}, example: {example}")
     card = await get_card(vocabulary, example)
-    log.info(card_id)
     # 将card json string转为object
     card_data = json.loads(card)
     vocabulary = card_data["Vocabulary"]
