@@ -1,7 +1,7 @@
 import logging
 from telegram import Update
 from telegram.ext import ContextTypes
-from util.carddb import CardDBHelper
+from utils.carddb import CardDBHelper
 
 log = logging.getLogger(__name__)
 
