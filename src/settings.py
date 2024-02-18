@@ -1,7 +1,7 @@
 from io import StringIO
 import os
 from environs import Env
-from util import doppler
+from utils import doppler
 
 
 def get_doppler_env():

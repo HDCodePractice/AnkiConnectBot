@@ -1,5 +1,6 @@
 import genanki
 from carddb import CardDBHelper
+import os
 
 fields = [
     {"name": "Vocabulary", "type": "string"},
@@ -78,6 +79,48 @@ css = """.card {
     text-align:left;
 }
 
+.meaning a {
+	text-decoration: none;
+	padding: 1px 6px 2px 5px;
+	margin: 0 5px 0 0;
+	font-size: 12px;
+	color: white;
+	font-weight: normal;
+	border-radius: 4px
+}
+
+.meaning a.pos_n {
+    background-color: #e3412f
+}
+
+.meaning a.pos_v {
+    background-color: #539007
+}
+
+.meaning a.pos_adj {
+    background-color: #f7b125
+}
+
+.meaning a.pos_adv {
+    background-color: #0271f7
+}
+
+.meaning a.pos_prep {
+    background-color: #684b9d
+}
+
+.meaning a.pos_conj {
+    background-color: #ff00ff
+}
+
+.meaning a.pos_pron {
+    background-color: #00ffff
+}
+
+.meaning a.pos_interj {
+    background-color: #d8d832
+}
+
 .example {
     font-size: 16px;
     color:#9CFFFA; 
@@ -106,6 +149,17 @@ img{
 }
 """
 
+pos_format = {
+    "noun": "<a class='pos_n'>n. </a>",
+    "verb": "<a class='pos_v'>v. </a>",
+    "adjective": "<a class='pos_adj'>adj. </a>",
+    "adverb": "<a class='pos_adv'>adv. </a>",
+    "preposition": "<a class='pos_prep'>prep. </a>",
+    "conjunction": "<a class='pos_conj'>conj. </a>",
+    "pronoun": "<a class='pos_pron'>pron. </a>",
+    "interjection": "<a class='pos_interj'>interj. </a>"
+}
+
 
 def create_hd_deck():
     card_db = CardDBHelper("cards.db")
@@ -127,6 +181,9 @@ def create_hd_deck():
     )
 
     media_files = []
+    # check res folder, if doesn't exist, create it
+    if not os.path.exists('res'):
+        os.makedirs('res')
     for card in cards:
         card_id, vocabulary, pronunciation, part_of_speech, \
             forms, meaning, chinese_meaning, example, chinese_example, \
@@ -135,18 +192,24 @@ def create_hd_deck():
         if sound_vocabulary:
             with open(f'res/{card_id}.mp3', 'wb') as f:
                 f.write(sound_vocabulary)
+            media_files.append(f'res/{card_id}.mp3')
 
         if sound_meaning:
             with open(f'res/{card_id}_m.mp3', 'wb') as f:
                 f.write(sound_meaning)
+            media_files.append(f'res/{card_id}_m.mp3')
 
         if sound_example:
             with open(f'res/{card_id}_e.mp3', 'wb') as f:
                 f.write(sound_example)
+            media_files.append(f'res/{card_id}_e.mp3')
 
         if image:
             with open(f'res/{card_id}.jpg', 'wb') as f:
                 f.write(image)
+            media_files.append(f'res/{card_id}.jpg')
+
+        pos = pos_format.get(part_of_speech, f"{part_of_speech}.")
 
         hd_note = genanki.Note(
             model=hd_model,
@@ -154,18 +217,17 @@ def create_hd_deck():
                 vocabulary,
                 pronunciation,
                 forms,
-                meaning,
-                chinese_meaning,
+                f"{pos}{meaning}",
+                f"{pos}{chinese_meaning}",
                 example,
                 chinese_example,
-                f"[sound:{card_id}.mp3]",
-                f"[sound:{card_id}_m.mp3]",
-                f"[sound:{card_id}_e.mp3]",
-                f'<img src="{card_id}.jpg">'
+                f"[sound:{card_id}.mp3]" if sound_vocabulary else "",
+                f"[sound:{card_id}_m.mp3]" if sound_meaning else "",
+                f"[sound:{card_id}_e.mp3]" if sound_example else "",
+                f'<img src="{card_id}.jpg">' if image else ''
             ])
         hd_deck.add_note(hd_note)
-        media_files += [f'res/{card_id}.jpg', f'res/{card_id}.mp3',
-                        f'res/{card_id}_m.mp3', f'res/{card_id}_e.mp3']
+
     hd_package = genanki.Package(hd_deck)
     hd_package.media_files = media_files
     hd_package.write_to_file('hdbook.apkg')

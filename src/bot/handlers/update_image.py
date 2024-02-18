@@ -1,8 +1,7 @@
 import logging
 from telegram import Update
 from telegram.ext import ContextTypes
-from util.tts import generation_audio_file
-from util.carddb import CardDBHelper
+from utils.carddb import CardDBHelper
 import tempfile
 
 log = logging.getLogger(__name__)
