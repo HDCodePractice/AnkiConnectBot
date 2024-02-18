@@ -22,7 +22,7 @@ async def add_vocabulary(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 将card json string转为object
     card_data = json.loads(card)
     vocabulary = card_data["Vocabulary"]
-    pronunciation = card_data["Pronunciation"]
+    pronunciation = card_data.get("Pronunciation", "")
     definition = card_data["Definitions"][0]
     part_of_speech = definition.get("PartOfSpeech", "")
     forms = definition.get("Forms", "")
