@@ -1,8 +1,8 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import ssl
 
-keyfile = "../localhost-key.pem"
-certfile = '../localhost-cert.pem'
+keyfile = "../127.0.0.1-key.pem"
+certfile = '../127.0.0.1.pem'
 hostname = 'localhost'
 
 context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
