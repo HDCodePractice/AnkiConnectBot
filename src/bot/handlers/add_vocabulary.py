@@ -12,11 +12,11 @@ async def add_vocabulary(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     input = msg.text.split(" ")[1:]
     if len(input) == 0:
-        await msg.reply_text("/addv vocabulary@example sentence")
+        await msg.reply_text("/a example sentence@vocabulary")
         return
     input = " ".join(input)
-    vocabulary = input.split("@")[0]
-    example = input.split("@")[1]
+    vocabulary = input.split("@")[1]
+    example = input.split("@")[0]
     log.info(f"vocabulary: {vocabulary}, example: {example}")
     card = await get_card(vocabulary, example)
     # 将card json string转为object
