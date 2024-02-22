@@ -1,5 +1,5 @@
 import logging
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import ContextTypes
 from utils.gpt import get_card
 import json
@@ -36,6 +36,10 @@ async def add_vocabulary(update: Update, context: ContextTypes.DEFAULT_TYPE):
     insert_card = (vocabulary, pronunciation, part_of_speech,
                    forms, meaning, chinese_meaning, example, chinese_example)
     card_id = card_db.insert_card(insert_card)
+    # create a inline button to show the card
+    web_app = WebAppInfo("https://www.google.com/")
+    keyboard = [[InlineKeyboardButton("Show", web_app=web_app)]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
     await msg.reply_text(f"""Vocabulary[{card_id}]:{vocabulary}
 Pronunciation: {pronunciation}
 Part of speech: {part_of_speech}
@@ -43,6 +47,6 @@ Forms: {forms}
 Meaning: {meaning}
 ChineseMeaning: {chinese_meaning}
 Example: {example}
-Chinese example: {chinese_example}""")
+Chinese example: {chinese_example}""", reply_markup=reply_markup)
 
     card_db.close()

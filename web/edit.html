@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Card</title>
+    <link rel="stylesheet" href="https://telegram.org/css/telegram-web.css">
+    <link rel="stylesheet" href="mycss.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+    <div id="usercard">
+        <p>ID:<span id="id"></span></p>
+        <p>Vocabulary:<span id="vocabulary">Vocabulary</span></p>
+        <p>Example:<span id="example">Example</span></p>
+    </div>
+    <script>
+        let tg = window.Telegram.WebApp;
+        let usercard = document.getElementById("usercard");
+
+        let url = new URL(window.location.href);
+        // 读取GET参数id，写入id
+        let card_id = url.searchParams.get("id");
+        let id = document.getElementById("id");
+        id.innerText = card_id;
+
+        // 读取GET参数vocabulary，写入vocabulary
+        let card_vocabulary = url.searchParams.get("vocabulary");
+        let vocabulary = document.getElementById("vocabulary");
+        vocabulary.innerText = card_vocabulary;
+
+        // 读取GET参数example，写入example
+        let card_example = url.searchParams.get("example");
+        let example = document.getElementById("example");
+        example.innerText = card_example;
+
+        // 读取GET参数meaning，写入meaning
+        let card_meaning = url.searchParams.get("meaning");
+        let meaning = document.getElementById("meaning");
+        meaning.innerText = card_meaning;
+    </script>
+</body>

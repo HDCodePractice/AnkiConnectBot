@@ -22,3 +22,5 @@ get_doppler_env()
 class settings:
     DEBUG = env.bool('DEBUG', default=False)
     BOT_TOKEN = env.str('BOT_TOKEN', default='')
+    WEBAPP_URL = env.str(
+        'WEBAPP_URL', default='https://127.0.0.1:4443/web/')
