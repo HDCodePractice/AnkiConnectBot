@@ -1,13 +1,15 @@
 import openai
+from settings import settings
 
 
 async def completion_json(
         sys_prompt,
         user_prompt,
-        model="gpt-3.5-turbo-0125",
+        model="gpt-3.5-turbo",
         temperature=0.0,
         max_tokens=1000):
-    client = openai.AsyncClient()
+    client = openai.AsyncClient(
+        api_key=settings.OPENAI_API_KEY, base_url=settings.OPENAI_API_URL)
     response = await client.chat.completions.create(
         model=model,
         response_format={"type": "json_object"},
@@ -49,6 +51,7 @@ Meaning和Example尽可能使用ESL一级的词汇。"""
     response = await completion_json(
         sys_prompt=sys_prompt,
         user_prompt=user_prompt,
-        max_tokens=max_tokens
+        max_tokens=max_tokens,
+        model=settings.OPENAI_MODEL
     )
     return response.choices[0].message.content

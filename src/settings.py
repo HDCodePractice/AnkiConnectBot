@@ -24,3 +24,7 @@ class settings:
     BOT_TOKEN = env.str('BOT_TOKEN', default='')
     WEBAPP_URL = env.str(
         'WEBAPP_URL', default='https://127.0.0.1:4443/web/')
+    OPENAI_API_KEY = env.str('OPENAI_API_KEY', default='')
+    OPENAI_API_URL = env.str(
+        'OPENAI_API_URL', default='https://api.openai.com/v1')
+    OPENAI_MODEL = env.str('OPENAI_MODEL', default='gpt-3.5-turbo')
